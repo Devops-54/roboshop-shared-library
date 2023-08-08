@@ -1,4 +1,4 @@
-def lintchecks(){
+def lintChecks(){
     sh '''
         echo Installing JSLint
         npm i jslint
@@ -20,7 +20,7 @@ def call() {
                     }   
                 }
             }
-            
+
             stage('Code Compile') {
                 steps {
                         sh "npm install"                  
