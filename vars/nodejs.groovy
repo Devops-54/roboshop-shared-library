@@ -42,7 +42,7 @@ def call(COMPONENT) {
                        sonarChecks()
                     }
                 }
-             }
+            }
             stage('Testing') {
                 steps {   
                     sh "echo Testing In Progress"
