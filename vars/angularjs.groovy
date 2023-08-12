@@ -10,6 +10,10 @@ def lintChecks(){
 def call(COMPONENT) {
     pipeline {
         agent { label 'WS' }
+        environment {
+            SONARCRED = credentials('SONARCRED')
+            SONARURL  = "172.31.74.222"
+        }
         stages { 
 
             stage('Lint Checks') {
