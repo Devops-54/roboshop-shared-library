@@ -30,10 +30,11 @@ def call(COMPONENT) {
                         sh "mvn clean compile"                  
                 }
             }
-            
+
             stage('Sonar Checks') {
                 steps {
                     script {
+                        env.ARGS="-Dsonar.java.binaries=target/"
                         common.sonarChecks()
                     }                  
                 }
