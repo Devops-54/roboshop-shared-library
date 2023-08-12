@@ -11,6 +11,10 @@ def lintChecks(){
 def call(COMPONENT) {
     pipeline {
         agent { label 'WS' }
+        environment {
+            SONARCRED = credentials('SONARCRED')
+            SONARURL  = "172.31.74.222"
+        }
         stages { 
 
             stage('Lint Checks') {
@@ -26,6 +30,20 @@ def call(COMPONENT) {
                         sh "mvn clean compile"                  
                 }
             }
-        }                                         
+            
+            stage('Sonar Checks') {
+                steps {
+                    script {
+                        common.sonarChecks()
+                    }                  
+                }
+            }
+
+            stage('Testing') {
+                steps {
+                    sh "echo Testing"
+                }
+            }
+        }    
     }
 }
