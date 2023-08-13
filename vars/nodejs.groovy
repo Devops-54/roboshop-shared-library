@@ -14,6 +14,7 @@ def call(COMPONENT) {
         agent { label 'WS' }
         environment {
             SONARCRED = credentials('SONARCRED')
+            NEXUS = credentials('NEXUS') 
             SONARURL  = "172.31.74.222"
         }
         stages { 
@@ -66,14 +67,18 @@ def call(COMPONENT) {
             stage('Prepare Artifacts') {
                 when { expression { env.TAG_NAME != null } }
                 steps {
-                    sh "echo preparing Artifacts"
+                    sh "echo preparing Artifacts for ${COMPONENT}"
+                    sh "npm install"
+                    sh "zip ${COMPONENT}.zip node_modules server.js"
                 }
             }
 
             stage('Upload Artifacts') {
                 when { expression { env.TAG_NAME != null } }
                 steps {
-                    sh "echo Uploading Artifacts to Nexus"
+                    sh "echo Uploading ${COMPONENT} Artifacts to Nexus"
+                    sh "curl -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.82.95:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
+                    sh "echo Uploading ${COMPONENT} Artifacts To Nexus is Completed"
                 }
             }
         }
