@@ -16,6 +16,7 @@ def call(COMPONENT) {
             SONARCRED = credentials('SONARCRED')
             NEXUS = credentials('NEXUS') 
             SONARURL  = "172.31.74.222"
+            NEXUSURL  = "172.31.82.95"
         }
         stages { 
 
@@ -61,6 +62,16 @@ def call(COMPONENT) {
                             sh "echo Functional testing completed"
                         }
                     }
+                }
+            }
+
+            stage('Validate Artifact Version') {
+                when { expression { env.TAG_NAME != null } }
+                steps {
+                    script {
+                       env.UPLOAD_STATUS=sh(returnStdout: true, script: 'curl -L -s http://${NEXUSURL}:8081/service/rest/repository/browse/${COMPONENT} | grep ${COMPONENT}-${TAG_NAME}.zip || true')
+                       print UPLOAD_STATUS
+                    }                    
                 }
             }
 
