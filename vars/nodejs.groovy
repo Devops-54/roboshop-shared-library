@@ -64,18 +64,19 @@ def call(COMPONENT) {
             }
 
             stage('Prepare Artifacts') {
-                when { expression { env.TAG_NAME != null }
+                when { expression { env.TAG_NAME != null } }
                 steps {
                     sh "echo preparing Artifacts"
                 }
             }
 
             stage('Upload Artifacts') {
-                when { expression { env.TAG_NAME != null }
+                when { expression { env.TAG_NAME != null } }
                 steps {
                     sh "echo Uploading Artifacts to Nexus"
                 }
             }
         }
-    }  
-} 
+    }
+}
+    
