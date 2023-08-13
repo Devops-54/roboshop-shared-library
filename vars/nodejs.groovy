@@ -67,18 +67,24 @@ def call(COMPONENT) {
             stage('Prepare Artifacts') {
                 when { expression { env.TAG_NAME != null } }
                 steps {
-                    sh "echo preparing Artifacts for ${COMPONENT}"
-                    sh "npm install"
-                    sh "zip ${COMPONENT}.zip node_modules server.js"
+                    sh'''
+                       echo preparing Artifacts for ${COMPONENT}
+                       npm install
+                       zip ${COMPONENT}-${TAG_NAME}.zip node_modules server.js
+
+                       '''
                 }
             }
 
             stage('Upload Artifacts') {
                 when { expression { env.TAG_NAME != null } }
                 steps {
-                    sh "echo Uploading ${COMPONENT} Artifacts to Nexus"
-                    sh "curl -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.82.95:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip"
-                    sh "echo Uploading ${COMPONENT} Artifacts To Nexus is Completed"
+                    sh'''
+                       echo Uploading ${COMPONENT} Artifacts to Nexus
+                       curl -L -v -u ${NEXUS_USR}:${NEXUS_PSW} --upload-file ${COMPONENT}-${TAG_NAME}.zip http://172.31.82.95:8081/repository/${COMPONENT}/${COMPONENT}-${TAG_NAME}.zip
+                       echo Uploading ${COMPONENT} Artifacts To Nexus is Completed
+
+                       '''
                 }
             }
         }
