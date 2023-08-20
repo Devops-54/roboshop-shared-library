@@ -1,4 +1,8 @@
-
+def call() {
+    node {
+        common.lintChecks()
+    }
+}
 
 
 /*    Uncommen this to use the declarative approach
