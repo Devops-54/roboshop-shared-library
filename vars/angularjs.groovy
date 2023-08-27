@@ -11,7 +11,6 @@ def call() {
     }
 }
 
-
 // def lintChecks(){
 //    sh '''
 //        echo Installing AngularLint for ${COMPONENT}
